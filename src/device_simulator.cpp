@@ -1,4 +1,5 @@
 #include "device_simulator.h"
+#include "database_handler.h"
 #include <iostream>
 #include <thread>
 #include <chrono>
@@ -12,6 +13,9 @@ void simulateDevice(int deviceId) {
     for (int i = 0; i < 5; ++i) {
         int data = dist(gen);
         std::cout << "Device " << deviceId << " generated data: " << data << std::endl;
+
+        // Store data in the database
+        insertDeviceData(deviceId, data);
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }

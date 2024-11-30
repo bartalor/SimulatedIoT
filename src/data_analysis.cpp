@@ -5,7 +5,6 @@
 #include <bsoncxx/json.hpp>
 #include <bsoncxx/builder/stream/document.hpp>
 
-static mongocxx::instance instance{}; // One per application
 static mongocxx::client client{mongocxx::uri{}};
 static auto db = client["IoTDatabase"];
 
