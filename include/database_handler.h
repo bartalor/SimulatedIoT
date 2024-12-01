@@ -4,6 +4,7 @@
 #include <mongocxx/pool.hpp>
 #include <mongocxx/client.hpp>
 #include <string>
+#include "config_handler.h"
 
 class DatabaseManager {
 public:
@@ -13,8 +14,9 @@ private:
     static mongocxx::pool pool; // Connection pool
 };
 
+// Functions for interacting with the database
 void initDatabaseClient();
-void insertDeviceData(int deviceId, int data);
-void fetchAllDeviceData();
+void insertDeviceData(const Config& config, int deviceId, int data);
+void fetchAllDeviceData(const Config& config);
 
-#endif
+#endif // DATABASE_HANDLER_H

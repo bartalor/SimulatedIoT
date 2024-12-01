@@ -1,4 +1,5 @@
 #include "data_analysis.h"
+#include "database_handler.h"
 #include <iostream>
 #include <mongocxx/client.hpp>
 #include <mongocxx/instance.hpp>
@@ -6,10 +7,10 @@
 #include <bsoncxx/builder/stream/document.hpp>
 
 static mongocxx::client client{mongocxx::uri{}};
-static auto db = client["IoTDatabase"];
 
-void analyzeData() {
-    auto collection = db["DeviceData"];
+void analyzeData(const Config& config) {
+	auto db = DatabaseManager::getDatabase(config.db_name);
+    auto collection = db[config.collection_name];
     auto cursor = collection.find({});
     
     int total = 0;
@@ -27,8 +28,9 @@ void analyzeData() {
     }
 }
 
-void analyzeDataByDevice(int deviceId) {
-    auto collection = db["DeviceData"];
+void analyzeDataByDevice(const Config& config, int deviceId) {
+	auto db = DatabaseManager::getDatabase(config.db_name);
+    auto collection = db[config.collection_name];
     
     // Create the filter using `bsoncxx::builder::basic::document`
     bsoncxx::builder::basic::document filter;
@@ -56,8 +58,9 @@ void analyzeDataByDevice(int deviceId) {
     }
 }
 
-void detectAnomalies() {
-    auto collection = db["DeviceData"];
+void detectAnomalies(const Config& config) {
+	auto db = DatabaseManager::getDatabase(config.db_name);
+    auto collection = db[config.collection_name];
     auto cursor = collection.find({});
 
     for (const auto& doc : cursor) {

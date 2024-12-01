@@ -5,7 +5,7 @@
 #include <chrono>
 #include <random>
 
-void simulateDevice(int deviceId) {
+void simulateDevice(const Config& config, int deviceId) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(20, 100);
@@ -15,7 +15,7 @@ void simulateDevice(int deviceId) {
         std::cout << "Device " << deviceId << " generated data: " << data << std::endl;
 
         // Store data in the database
-        insertDeviceData(deviceId, data);
+        insertDeviceData(config, deviceId, data);
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }

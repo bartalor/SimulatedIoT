@@ -17,9 +17,9 @@ void initDatabaseClient() {
     std::cout << "Connected to MongoDB using connection pool successfully." << std::endl;
 }
 
-void insertDeviceData(int deviceId, int data) {
-    auto db = DatabaseManager::getDatabase("IoTDatabase");
-    auto collection = db["DeviceData"];
+void insertDeviceData(const Config& config, int deviceId, int data) {
+    auto db = DatabaseManager::getDatabase(config.db_name);
+    auto collection = db[config.collection_name];
 
     bsoncxx::builder::stream::document document{};
     document << "device_id" << deviceId
@@ -27,12 +27,11 @@ void insertDeviceData(int deviceId, int data) {
              << "timestamp" << bsoncxx::types::b_date{std::chrono::system_clock::now()};
 
     collection.insert_one(document.view());
-    std::cout << "Data inserted for device " << deviceId << ": " << data << std::endl;
 }
 
-void fetchAllDeviceData() {
-    auto db = DatabaseManager::getDatabase("IoTDatabase");
-    auto collection = db["DeviceData"];
+void fetchAllDeviceData(const Config& config) {
+    auto db = DatabaseManager::getDatabase(config.db_name);
+    auto collection = db[config.collection_name];
     auto cursor = collection.find({});
 
     for (const auto& doc : cursor) {

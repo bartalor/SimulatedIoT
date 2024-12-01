@@ -1,0 +1,12 @@
+{
+	"num_threads": 2	,
+	"database": {
+	  "name": "IoTDatabase",
+	  "collection": "DeviceData"
+	},
+	"simulation": {
+	  "min_data": 20,
+	  "max_data": 100
+	}
+  }
+  

@@ -1,28 +1,23 @@
 #include <iostream>
-#include <thread>
-#include <vector>
+#include "config_handler.h"
 #include "device_simulator.h"
 #include "database_handler.h"
+#include "simulation_manager.h"
 #include "data_analysis.h"
-#define N_THREADS 2
 
 int main() {
+    auto config = loadConfig("config.json");
+
     initDatabaseClient();
-    std::cout << "Starting IoT Device Simulation..." << std::endl;
+    std::cout << "Starting IoT Simulation..." << std::endl;
 
-    std::vector<std::thread> deviceThreads;
-    for (int i = 0; i < N_THREADS; ++i) {
-        deviceThreads.emplace_back(simulateDevice, i);
-    }
+    SimulationManager simulation(config);
+    simulation.start();
 
-    for (auto& thread : deviceThreads) {
-        thread.join();
-    }
+    std::cout << "Performing Data Analysis..." << std::endl;
+    analyzeData(config);
+    analyzeDataByDevice(config, 0);
+    detectAnomalies(config);
 
-    std::cout << "All device simulations completed." << std::endl;
-
-    analyzeData();             // General analysis for all devices
-    analyzeDataByDevice(2);    // Analyze data for device with ID 2
-    detectAnomalies();         // Check for anomalies
     return 0;
 }
