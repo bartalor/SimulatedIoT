@@ -7,6 +7,7 @@ struct Config {
     int num_threads;
     std::string db_name;
     std::string collection_name;
+    std::string db_type; // New field for database type
     int min_data;
     int max_data;
 };

@@ -12,11 +12,13 @@ Config loadConfig(const std::string& filename) {
     nlohmann::json json;
     file >> json;
 
-    return {
-        json["num_threads"],
-        json["database"]["name"],
-        json["database"]["collection"],
-        json["simulation"]["min_data"],
-        json["simulation"]["max_data"]
-    };
+return {
+    json["num_threads"],
+    json["database"]["name"],
+    json["database"]["collection"],
+    json["database"]["type"], // Load the new field
+    json["simulation"]["min_data"],
+    json["simulation"]["max_data"]
+};
+
 }

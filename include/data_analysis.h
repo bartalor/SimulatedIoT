@@ -10,4 +10,4 @@ void analyzeData(const Config& config);
 void analyzeDataByDevice(const Config& config, int deviceId);
 void detectAnomalies(const Config& config);
 
-#endif // DATA_ANALYSIS_H
+#endif

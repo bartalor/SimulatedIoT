@@ -1,21 +1,19 @@
-#include "data_analysis.h"
-#include "database_interface.h"
+#include "mongodb_data_analysis.h"
 #include <iostream>
-#include <mongocxx/client.hpp>
-#include <mongocxx/instance.hpp>
-#include <bsoncxx/json.hpp>
-#include <bsoncxx/builder/stream/document.hpp>
+#include <vector>
 
-static mongocxx::client client{mongocxx::uri{}};
+MongoDBDataAnalysis::MongoDBDataAnalysis(const Config& config, IDatabase& db)
+    : config(config), db(db) {}
 
-void analyzeData(IDatabase& db, const Config& config) {
+void MongoDBDataAnalysis::analyzeData() {
     auto dataEntries = db.fetchAllDeviceData();
 
     int total = 0;
     int count = 0;
+
     for (const auto& entry : dataEntries) {
         total += entry.data;
-        count++;
+        ++count;
     }
 
     if (count > 0) {
@@ -25,7 +23,7 @@ void analyzeData(IDatabase& db, const Config& config) {
     }
 }
 
-void analyzeDataByDevice(IDatabase& db, int deviceId) {
+void MongoDBDataAnalysis::analyzeDataByDevice(int deviceId) {
     auto dataEntries = db.fetchDataByDevice(deviceId);
 
     int total = 0;
@@ -43,14 +41,13 @@ void analyzeDataByDevice(IDatabase& db, int deviceId) {
     }
 }
 
-void detectAnomalies(IDatabase& db, int threshold) {
+void MongoDBDataAnalysis::detectAnomalies() {
     auto dataEntries = db.fetchAllDeviceData();
 
     for (const auto& entry : dataEntries) {
-        if (entry.data > threshold) {
+        if (entry.data > 90) { // Arbitrary threshold for anomaly
             std::cout << "Anomaly detected! Device " << entry.deviceId
                       << " sent unusually high data: " << entry.data << std::endl;
         }
     }
 }
-

@@ -12,17 +12,35 @@ find_package(nlohmann_json REQUIRED)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-add_executable(SimulatedIoTProject
-	src/main.cpp
-	src/device_simulator.cpp
-	src/database_handler.cpp
-	src/data_analysis.cpp
+# Source files
+set(SOURCES
+    src/main.cpp
     src/config_handler.cpp
+    src/device_simulator.cpp
     src/simulation_manager.cpp
+    src/mongodb_handler.cpp
+    src/mongodb_data_analysis.cpp
+    # Add other source files as needed
 )
 
+# Header files
+set(HEADERS
+    include/config_handler.h
+    include/device_simulator.h
+    include/simulation_manager.h
+    include/database_interface.h
+    include/mongodb_handler.h
+    include/data_analysis_interface.h
+    include/mongodb_data_analysis.h
+    include/database_factory.h
+    include/data_analysis_factory.h
+    # Add other header files as needed
+)
+
+add_executable(SimulatedIoTProject ${SOURCES} ${HEADERS})
+
 target_link_libraries(
-	SimulatedIoTProject PRIVATE 
-	mongo::mongocxx_shared 
-	nlohmann_json::nlohmann_json
+    SimulatedIoTProject PRIVATE
+    mongo::mongocxx_shared
+    nlohmann_json::nlohmann_json
 )
